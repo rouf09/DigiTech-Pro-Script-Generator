@@ -1,6 +1,7 @@
-import { app, BrowserWindow, ipcMain, shell } from "electron";
+// digitechpro-scriptgen-electron/electron/main.ts
+import { app, BrowserWindow } from "electron";
 import * as path from "path";
-import * as url from "url";
+import { pathToFileURL } from "url";
 
 const isDev = !!process.env.VITE_DEV_SERVER_URL;
 let win: BrowserWindow | null = null;
@@ -16,32 +17,24 @@ async function createWindow() {
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
       contextIsolation: true,
-      nodeIntegration: false,
-    },
+      nodeIntegration: false
+    }
   });
 
   if (isDev && process.env.VITE_DEV_SERVER_URL) {
     await win.loadURL(process.env.VITE_DEV_SERVER_URL);
-    win.webContents.openDevTools({ mode: "detach" }); // চাইলে মুছে দাও
   } else {
-    // 🔧 PRODUCTION: dist/index.html লোড করো
-    await win.loadFile(path.join(__dirname, "../dist-renderer/index.html"));
+    const indexPath = path.join(__dirname, "..", "dist-renderer", "index.html");
+    const fileUrl = pathToFileURL(indexPath).toString();   // ✅ safe file:// URL
+    await win.loadURL(fileUrl);
   }
-if (isDev) win.webContents.openDevTools({ mode: "detach" });
-  win.on("closed", () => {
-    win = null;
+
+  // ডিবাগে সাহায্য করবে
+  win.webContents.on("did-fail-load", (_e, code, desc, url) => {
+    console.error("did-fail-load", code, desc, url);
   });
 }
 
-// ---- App lifecycle ----
 app.whenReady().then(createWindow);
-
-app.on("window-all-closed", () => {
-  if (process.platform !== "darwin") app.quit();
-});
-
-app.on("activate", () => {
-  if (BrowserWindow.getAllWindows().length === 0) createWindow();
-});
-
-// (ঐচ্ছিক) IPC / shell / অন্য হ্যান্ডলার এখানে রাখো
+app.on("window-all-closed", () => { if (process.platform !== "darwin") app.quit(); });
+app.on("activate", () => { if (BrowserWindow.getAllWindows().length === 0) createWindow(); });
