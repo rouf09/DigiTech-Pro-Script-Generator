@@ -25,9 +25,9 @@ async function createWindow() {
     win.webContents.openDevTools({ mode: "detach" }); // চাইলে মুছে দাও
   } else {
     // 🔧 PRODUCTION: dist/index.html লোড করো
-    await win.loadFile(path.join(__dirname, "../dist/index.html"));
+    await win.loadFile(path.join(__dirname, "../dist-renderer/index.html"));
   }
-
+if (isDev) win.webContents.openDevTools({ mode: "detach" });
   win.on("closed", () => {
     win = null;
   });
