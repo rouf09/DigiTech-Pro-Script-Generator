@@ -4,7 +4,15 @@
   "description": "DigiTech-Pro Script Generator v1.0 (Beta) • Electron + React (Vite)",
   "author": "DigiTech-Pro",
   "license": "MIT",
+
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rouf09/DigiTech-Pro-Script-Generator.git"
+  },
+  "homepage": "https://github.com/rouf09/DigiTech-Pro-Script-Generator",
+
   "main": "dist-electron/main.js",
+
   "scripts": {
     "clean": "rimraf dist dist-electron dist-renderer release",
     "dev": "concurrently -k \"npm:dev:electron\" \"npm:dev:vite\"",
@@ -16,6 +24,32 @@
     "pack:win": "electron-builder --win nsis portable",
     "start": "electron ."
   },
+
+  "build": {
+    "appId": "com.digitechpro.scriptgen",
+    "productName": "DigiTech-Pro Script Generator",
+    "directories": { "output": "release" },
+    "files": [
+      "dist/**",
+      "dist-electron/**",
+      "assets/**",
+      "styles/**",
+      "index.html"
+    ],
+    "asar": true,
+    "win": {
+      "target": ["nsis", "portable"],
+      "icon": "assets/icon.ico"
+    },
+    "nsis": {
+      "oneClick": true,
+      "perMachine": false,
+      "allowElevation": true,
+      "allowToChangeInstallationDirectory": false
+    },
+    "publish": null
+  },
+
   "dependencies": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
