@@ -1,0 +1,39 @@
+{
+  "name": "digitechpro-scriptgen-electron",
+  "version": "1.0.0",
+  "description": "DigiTech-Pro Script Generator v1.0 (Beta) \u2022 Electron + React (Vite) \u2022 CI builds Windows .exe",
+  "author": "DigiTech-Pro",
+  "main": "dist-electron/main/main.cjs",
+  "license": "MIT",
+  "scripts": {
+    "clean": "rimraf dist dist-electron dist-renderer release",
+    "dev": "concurrently -k \"npm:dev:electron\" \"npm:dev:vite\"",
+    "dev:vite": "vite",
+    "dev:electron": "wait-on http://localhost:5173 && cross-env VITE_DEV_SERVER_URL=http://localhost:5173 ts-node-esm electron/dev-run.ts",
+    "build:renderer": "vite build",
+    "build:electron": "tsc -p electron/tsconfig.json",
+    "build": "npm run clean && npm run build:renderer && npm run build:electron",
+    "pack:win": "electron-builder --win nsis portable",
+    "start": "electron ."
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.12.7",
+    "@types/react": "^18.2.66",
+    "@types/react-dom": "^18.2.22",
+    "@vitejs/plugin-react": "^4.2.1",
+    "concurrently": "^8.2.2",
+    "cross-env": "^7.0.3",
+    "electron": "^29.1.0",
+    "electron-builder": "^24.13.3",
+    "rimraf": "^5.0.5",
+    "ts-node": "^10.9.2",
+    "ts-node-esm": "^2.0.0",
+    "typescript": "^5.4.5",
+    "vite": "^5.2.0",
+    "wait-on": "^7.2.0"
+  }
+}

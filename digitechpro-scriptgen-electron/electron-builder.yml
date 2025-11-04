@@ -1,0 +1,21 @@
+
+appId: com.digitechpro.scriptgen
+productName: DigiTech-Pro Script Generator
+directories:
+  output: release
+files:
+  - "dist-electron/**"
+  - "dist-renderer/**"
+  - "assets/**"
+extraResources:
+  - from: assets/
+    to: resources
+win:
+  target: [nsis, portable]
+  artifactName: "${productName} Setup ${version}.exe"
+nsis:
+  oneClick: true
+  perMachine: false
+  allowToChangeInstallationDirectory: false
+publish:
+  provider: github
