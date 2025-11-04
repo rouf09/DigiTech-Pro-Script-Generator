@@ -3,7 +3,7 @@ name: Build Electron App (Windows)
 on:
   push:
     tags:
-      - 'v*'          # v1.0.1, v1.0.2 ...
+      - 'v*'
 
 jobs:
   build:
@@ -16,13 +16,12 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          cache: 'npm'
+          node-version: '20'   # cache লাইন নেই
 
       - name: Install deps
-        run: npm ci
+        run: npm install --legacy-peer-deps
 
-      - name: Build renderer + electron
+      - name: Build (renderer + electron)
         run: npm run build
 
       - name: Pack Windows EXE
