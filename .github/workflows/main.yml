@@ -3,14 +3,14 @@ name: Build Electron App (Windows)
 on:
   push:
     tags:
-      - 'v*'
+      - 'v*'      # e.g. v1.0.7
 
 jobs:
   build:
     runs-on: windows-latest
     defaults:
       run:
-        working-directory: digitechpro-scriptgen-electron   # << সাবফোল্ডার
+        working-directory: digitechpro-scriptgen-electron   # প্রজেক্ট সাবফোল্ডার
 
     steps:
       - name: Checkout
@@ -31,7 +31,7 @@ jobs:
         run: npx electron-builder --win nsis portable --publish=never
 
       - name: Upload artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4      # ⬅️ v4 লাগবে
         with:
-          name: DigiTechProScriptGenerator
+          name: DigiTech-Pro-Script-Generator
           path: digitechpro-scriptgen-electron/release/*.exe
