@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "DigiTech-Pro Script Generator v1.0 (Beta) • Electron + React (Vite)",
   "author": "DigiTech-Pro",
-  "main": "dist-electron/main/main.cjs",
+  "main": "dist-electron/main.js"
   "license": "MIT",
   "scripts": {
     "clean": "rimraf dist dist-electron dist-renderer release",
