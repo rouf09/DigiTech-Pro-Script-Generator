@@ -8,6 +8,9 @@ on:
 jobs:
   build:
     runs-on: windows-latest
+    defaults:
+      run:
+        working-directory: digitechpro-scriptgen-electron   # << সাবফোল্ডার
 
     steps:
       - name: Checkout
@@ -16,7 +19,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: '20'   # cache লাইন নেই
+          node-version: '20'
 
       - name: Install deps
         run: npm install --legacy-peer-deps
@@ -32,4 +35,4 @@ jobs:
         with:
           name: DigiTech-Pro-Script-Generator
           path: |
-            release/*.exe
+            digitechpro-scriptgen-electron/release/*.exe   # << আউটপুট পাথ
