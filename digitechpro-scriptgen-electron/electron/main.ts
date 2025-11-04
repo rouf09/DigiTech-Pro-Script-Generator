@@ -15,7 +15,7 @@ async function createWindow() {
     title: "DigiTech-Pro • Script Generator",
     backgroundColor: "#0b1023",
     webPreferences: {
-      preload: path.join(__dirname, "preload.cjs"),
+      preload: path.join(__dirname, "preload.js"),
     },
   });
 
