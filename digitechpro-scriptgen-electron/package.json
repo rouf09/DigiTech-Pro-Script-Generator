@@ -30,7 +30,7 @@
     "productName": "DigiTech-Pro Script Generator",
     "directories": { "output": "release" },
     "files": [
-      "dist/**",
+       "dist-renderer/**",
       "dist-electron/**",
       "assets/**",
       "styles/**",
