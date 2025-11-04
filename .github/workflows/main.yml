@@ -31,8 +31,7 @@ jobs:
         run: npx electron-builder --win nsis portable --publish=never
 
       - name: Upload artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v3
         with:
-          name: DigiTech-Pro-Script-Generator
-          path: |
-            digitechpro-scriptgen-electron/release/*.exe   # << আউটপুট পাথ
+          name: DigiTechProScriptGenerator
+          path: digitechpro-scriptgen-electron/release/*.exe
