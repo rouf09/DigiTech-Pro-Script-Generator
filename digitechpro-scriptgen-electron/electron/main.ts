@@ -1,40 +1,42 @@
-// digitechpro-scriptgen-electron/electron/main.ts
-import { app, BrowserWindow } from "electron";
+import { app, BrowserWindow, ipcMain } from "electron";
 import * as path from "path";
-import { pathToFileURL } from "url";
+import { existsSync } from "fs";
 
-const isDev = !!process.env.VITE_DEV_SERVER_URL;
+// ✅ Keep a global reference to window
 let win: BrowserWindow | null = null;
 
 async function createWindow() {
+  const iconPath = path.join(__dirname, "../assets/icon.ico");
+  if (!existsSync(iconPath)) console.warn("⚠️ Icon missing:", iconPath);
+
   win = new BrowserWindow({
     width: 1280,
     height: 760,
     minWidth: 1100,
     minHeight: 680,
-    title: "DigiTech-Pro • Script Generator",
     backgroundColor: "#0b1023",
+    title: "DigiTech-Pro • Script Generator",
+    icon: iconPath, // ✅ Custom icon
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
-      contextIsolation: true,
-      nodeIntegration: false
-    }
+    },
   });
 
-  if (isDev && process.env.VITE_DEV_SERVER_URL) {
-    await win.loadURL(process.env.VITE_DEV_SERVER_URL);
-  } else {
-    const indexPath = path.join(__dirname, "..", "dist-renderer", "index.html");
-    const fileUrl = pathToFileURL(indexPath).toString();   // ✅ safe file:// URL
-    await win.loadURL(fileUrl);
-  }
+  const startURL =
+    process.env.VITE_DEV_SERVER_URL ||
+    `file://${path.join(__dirname, "../dist-renderer/index.html")}`;
 
-  // ডিবাগে সাহায্য করবে
-  win.webContents.on("did-fail-load", (_e, code, desc, url) => {
-    console.error("did-fail-load", code, desc, url);
-  });
+  win.loadURL(startURL).catch((err) => console.error("Load failed:", err));
+  win.on("closed", () => (win = null));
 }
 
-app.whenReady().then(createWindow);
-app.on("window-all-closed", () => { if (process.platform !== "darwin") app.quit(); });
-app.on("activate", () => { if (BrowserWindow.getAllWindows().length === 0) createWindow(); });
+// ✅ App events
+app.whenReady().then(() => {
+  createWindow();
+  app.on("activate", () => {
+    if (BrowserWindow.getAllWindows().length === 0) createWindow();
+  });
+});
+app.on("window-all-closed", () => {
+  if (process.platform !== "darwin") app.quit();
+});
